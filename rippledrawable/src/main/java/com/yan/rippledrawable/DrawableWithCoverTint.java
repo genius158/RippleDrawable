@@ -38,7 +38,6 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
     this.original = original;
     this.color = color;
     if (original != null) {
-      original.setBounds(0, 0, original.getIntrinsicWidth(), original.getIntrinsicHeight());
       original.setCallback(this);
     }
   }
