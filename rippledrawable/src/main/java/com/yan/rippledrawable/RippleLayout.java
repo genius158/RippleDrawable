@@ -133,5 +133,4 @@ public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListen
 
     return new DrawableWithCover(drawable, color);
   }
-
 }

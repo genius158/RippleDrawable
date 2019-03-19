@@ -38,6 +38,7 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
     this.original = original;
     this.color = color;
     if (original != null) {
+      original.setBounds(0, 0, original.getIntrinsicWidth(), original.getIntrinsicHeight());
       original.setCallback(this);
     }
   }
@@ -153,6 +154,20 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
     final Drawable wrappedDrawable = DrawableCompat.wrap(drawable).mutate();
     DrawableCompat.setTintList(wrappedDrawable, colors);
     return wrappedDrawable;
+  }
+
+  @Override public int getIntrinsicWidth() {
+    if (original != null) {
+      return original.getIntrinsicWidth();
+    }
+    return super.getIntrinsicWidth();
+  }
+
+  @Override public int getIntrinsicHeight() {
+    if (original != null) {
+      return original.getIntrinsicHeight();
+    }
+    return super.getIntrinsicHeight();
   }
 
   @Override public void invalidateDrawable(@NonNull Drawable who) {

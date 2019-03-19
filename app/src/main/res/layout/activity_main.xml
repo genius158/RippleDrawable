@@ -38,7 +38,7 @@
     <TextView
         android:layout_width="200dp"
         android:layout_height="200dp"
-        android:background="@drawable/test_icon"
+        android:background="#BA68C8"
         android:clickable="true"
         android:focusable="true"
         android:text="Hello World!"

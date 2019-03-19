@@ -123,6 +123,20 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
     return true;
   }
 
+  @Override public int getIntrinsicWidth() {
+    if (original != null) {
+      return original.getIntrinsicWidth();
+    }
+    return super.getIntrinsicWidth();
+  }
+
+  @Override public int getIntrinsicHeight() {
+    if (original != null) {
+      return original.getIntrinsicHeight();
+    }
+    return super.getIntrinsicHeight();
+  }
+
   @Override public void invalidateDrawable(@NonNull Drawable who) {
     this.invalidateSelf();
   }
