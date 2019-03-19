@@ -128,9 +128,9 @@ public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListen
         || drawable instanceof GradientDrawable
         || drawable instanceof NinePatchDrawable
         || drawable instanceof BitmapDrawable) {
-      return new DrawableWithCoverTint(drawable, color);
+      return new DrawableWithCoverTint(drawable, mask, color);
     }
 
-    return new DrawableWithCover(drawable, color);
+    return new DrawableWithCover(drawable, mask, color);
   }
 }

@@ -21,14 +21,16 @@ import android.support.annotation.NonNull;
  * use shader to cteate cover
  */
 class DrawableWithCover extends Drawable implements Drawable.Callback {
-  private Drawable original;
+  private final Drawable original;
+  private final Drawable cover;
   private boolean coverShow;
-  private Rect bounds = new Rect();
+  private final Rect bounds = new Rect();
+  private final Paint paint = new Paint();
   private Shader shader;
-  private Paint paint = new Paint();
 
-  DrawableWithCover(Drawable original, int color) {
+  DrawableWithCover(Drawable original, Drawable cover, int color) {
     this.original = original;
+    this.cover = cover;
     paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
 
     if (original != null) {
@@ -66,6 +68,10 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
   }
 
   @Override protected boolean onStateChange(int[] stateSet) {
+    if (original != null) {
+      original.setState(stateSet);
+    }
+
     boolean enabled = false;
     boolean pressed = false;
     boolean focused = false;
@@ -85,7 +91,7 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
 
     coverShow = enabled && (pressed || focused || hovered);
     if (coverShow) {
-      loadShader(original);
+      loadShader(cover == null ? original : cover);
     }
 
     invalidateSelf();

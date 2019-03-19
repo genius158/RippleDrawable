@@ -29,13 +29,15 @@ import android.support.v4.graphics.drawable.DrawableCompat;
 class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
   private int color;
 
-  private Drawable original;
+  private final Drawable original;
+  private final Drawable coverOriginal;
   private Drawable cover;
   private boolean coverShow;
   private Rect bounds = new Rect();
 
-  DrawableWithCoverTint(Drawable original, int color) {
+  DrawableWithCoverTint(Drawable original, Drawable coverOriginal, int color) {
     this.original = original;
+    this.coverOriginal = coverOriginal;
     this.color = color;
     if (original != null) {
       original.setCallback(this);
@@ -93,7 +95,7 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
     coverShow = enabled && (pressed || focused || hovered);
 
     if (coverShow) {
-      coverBitmap(original, color);
+      coverBitmap(coverOriginal == null ? original : coverOriginal, color);
     } else {
       if (cover != null) {
         cover.setCallback(null);
