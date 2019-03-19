@@ -31,6 +31,9 @@ class DrawableWithCover extends Drawable {
   DrawableWithCover(Drawable original, int color) {
     this.original = original;
     this.color = color;
+    if (original != null) {
+      original.setCallback(this);
+    }
   }
 
   @Override public void draw(@NonNull Canvas canvas) {
