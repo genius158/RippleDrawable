@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <declare-styleable name="RippleLayout">
+    <attr format="color" name="rippleColor"/>
+    <attr format="reference" name="rippleMask"/>
+  </declare-styleable>
+</resources>

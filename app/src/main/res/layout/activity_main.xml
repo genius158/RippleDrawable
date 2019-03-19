@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical"
+    tools:context=".MainActivity"
+    >
+
+  <com.yan.rippledrawable.RippleLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:layout_constraintBottom_toBottomOf="parent"
+      app:layout_constraintLeft_toLeftOf="parent"
+      app:layout_constraintRight_toRightOf="parent"
+      app:layout_constraintTop_toTopOf="parent"
+      app:rippleColor="#87FFF176"
+      >
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@mipmap/ic_launcher"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Hello World!"
+        />
+  </com.yan.rippledrawable.RippleLayout>
+
+  <com.yan.rippledrawable.RippleLayout
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      app:rippleColor="#3A000000"
+      >
+    <TextView
+        android:layout_width="200dp"
+        android:layout_height="200dp"
+        android:background="@drawable/test_icon"
+        android:clickable="true"
+        android:focusable="true"
+        android:text="Hello World!"
+        />
+  </com.yan.rippledrawable.RippleLayout>
+
+  <ImageView
+      android:id="@+id/iv_code"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:clickable="true"
+      android:focusable="true"
+      android:src="@drawable/test_icon"
+      android:text="Hello World!"
+      />
+
+</LinearLayout>
