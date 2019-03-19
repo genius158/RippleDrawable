@@ -20,9 +20,8 @@ import android.support.annotation.NonNull;
  * work on all kinds of drawable
  * use shader to cteate cover
  */
-class DrawableWithCover extends Drawable {
+class DrawableWithCover extends Drawable implements Drawable.Callback {
   private Drawable original;
-  private int color;
   private boolean coverShow;
   private Rect bounds = new Rect();
   private Shader shader;
@@ -30,7 +29,8 @@ class DrawableWithCover extends Drawable {
 
   DrawableWithCover(Drawable original, int color) {
     this.original = original;
-    this.color = color;
+    paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
+
     if (original != null) {
       original.setCallback(this);
     }
@@ -117,10 +117,21 @@ class DrawableWithCover extends Drawable {
     drawable.setBounds(bounds);
     drawable.draw(canvas);
     paint.setShader(shader);
-    paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
   }
 
   @Override public boolean isStateful() {
     return true;
+  }
+
+  @Override public void invalidateDrawable(@NonNull Drawable who) {
+    this.invalidateSelf();
+  }
+
+  @Override public void scheduleDrawable(@NonNull Drawable who, @NonNull Runnable what, long when) {
+    this.scheduleSelf(what, when);
+  }
+
+  @Override public void unscheduleDrawable(@NonNull Drawable who, @NonNull Runnable what) {
+    this.unscheduleSelf(what);
   }
 }
