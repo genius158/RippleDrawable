@@ -121,12 +121,14 @@ public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListen
 
   public static Drawable getRippleDrawable(Drawable drawable, int rippleStyle, Drawable mask,
       int color) {
-
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
       if (rippleStyle == 0) {
         return new RippleDrawable(ColorStateList.valueOf(color), drawable, mask);
       }
-      return new DrawableRippleWithCover(drawable, color);
+      if (drawable == null && mask == null) {
+        return new RippleDrawable(ColorStateList.valueOf(color), null, null);
+      }
+      return new DrawableRippleWithCover(drawable, mask, color);
     }
 
     if (drawable == null

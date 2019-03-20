@@ -18,19 +18,19 @@ import android.support.annotation.NonNull;
  * @author genius158
  *
  * work on all kinds of drawable
- * use shader to cteate cover
+ * use shader to cteate mask
  */
 class DrawableWithCover extends Drawable implements Drawable.Callback {
   private final Drawable original;
-  private final Drawable cover;
+  private final Drawable mask;
   private boolean coverShow;
   private final Rect bounds = new Rect();
   private final Paint paint = new Paint();
   private Shader shader;
 
-  DrawableWithCover(Drawable original, Drawable cover, int color) {
+  DrawableWithCover(Drawable original, Drawable mask, int color) {
     this.original = original;
-    this.cover = cover;
+    this.mask = mask;
     paint.setColorFilter(new PorterDuffColorFilter(color, PorterDuff.Mode.SRC_IN));
 
     if (original != null) {
@@ -91,7 +91,7 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
 
     coverShow = enabled && (pressed || focused || hovered);
     if (coverShow) {
-      loadShader(cover == null ? original : cover);
+      loadShader(mask == null ? original : mask);
     }
 
     invalidateSelf();
@@ -105,6 +105,9 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
     this.bounds.set(bounds);
     if (original != null) {
       original.setBounds(this.bounds);
+    }
+    if (mask != null) {
+      mask.setBounds(this.bounds);
     }
     invalidateSelf();
   }
@@ -120,7 +123,6 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
     if (drawable == null) {
       drawable = new ShapeDrawable();
     }
-    drawable.setBounds(bounds);
     drawable.draw(canvas);
     paint.setShader(shader);
   }
@@ -133,6 +135,9 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
     if (original != null) {
       return original.getIntrinsicWidth();
     }
+    if (mask != null) {
+      return mask.getIntrinsicWidth();
+    }
     return super.getIntrinsicWidth();
   }
 
@@ -140,6 +145,10 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
     if (original != null) {
       return original.getIntrinsicHeight();
     }
+    if (mask != null) {
+      return mask.getIntrinsicHeight();
+    }
+
     return super.getIntrinsicHeight();
   }
 

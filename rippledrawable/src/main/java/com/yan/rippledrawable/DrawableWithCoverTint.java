@@ -24,14 +24,14 @@ import android.support.v4.graphics.drawable.DrawableCompat;
  * <br/>
  *
  * use drawable setColorFiller change self color
- * to set cover
+ * to set mask
  */
 class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
   private int color;
 
   private final Drawable original;
   private final Drawable coverOriginal;
-  private Drawable cover;
+  private Drawable mask;
   private boolean coverShow;
   private Rect bounds = new Rect();
 
@@ -48,10 +48,10 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
     if (original != null) {
       original.draw(canvas);
     }
-    if (!coverShow || cover == null) {
+    if (!coverShow || mask == null) {
       return;
     }
-    cover.draw(canvas);
+    mask.draw(canvas);
   }
 
   @Override public void setAlpha(int alpha) {
@@ -97,9 +97,9 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
     if (coverShow) {
       coverBitmap(coverOriginal == null ? original : coverOriginal, color);
     } else {
-      if (cover != null) {
-        cover.setCallback(null);
-        cover = null;
+      if (mask != null) {
+        mask.setCallback(null);
+        mask = null;
       }
     }
 
@@ -108,25 +108,24 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
   }
 
   private void coverBitmap(Drawable original, int color) {
-    if (cover != null || original instanceof StateListDrawable) {
+    if (mask != null || original instanceof StateListDrawable) {
       return;
     }
     if (original != null) {
       ConstantState cs = original.getConstantState();
       if (cs != null) {
-        cover = tintDrawable(cs.newDrawable(), ColorStateList.valueOf(color));
+        mask = tintDrawable(cs.newDrawable(), ColorStateList.valueOf(color));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-          cover.setLayoutDirection(original.getLayoutDirection());
+          mask.setLayoutDirection(original.getLayoutDirection());
         }
-        cover.setLevel(original.getLevel());
+        mask.setLevel(original.getLevel());
       }
     }
 
-    if (cover == null) {
-      cover = new ColorDrawable(color);
+    if (mask == null) {
+      mask = new ColorDrawable(color);
     }
-    cover.setCallback(this);
-    cover.setBounds(bounds);
+    mask.setCallback(this);
   }
 
   @Override protected void onBoundsChange(Rect bounds) {
@@ -136,6 +135,9 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
     this.bounds.set(bounds);
     if (original != null) {
       original.setBounds(this.bounds);
+    }
+    if (mask != null) {
+      mask.setBounds(bounds);
     }
     invalidateSelf();
   }
@@ -161,12 +163,18 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
     if (original != null) {
       return original.getIntrinsicWidth();
     }
+    if (coverOriginal != null) {
+      return coverOriginal.getIntrinsicWidth();
+    }
     return super.getIntrinsicWidth();
   }
 
   @Override public int getIntrinsicHeight() {
     if (original != null) {
       return original.getIntrinsicHeight();
+    }
+    if (coverOriginal != null) {
+      return coverOriginal.getIntrinsicHeight();
     }
     return super.getIntrinsicHeight();
   }
