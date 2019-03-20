@@ -64,6 +64,20 @@
           android:text="Hello World!"
           />
     </com.yan.rippledrawable.RippleLayout>
+    <com.yan.rippledrawable.RippleLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:rippleColor="#3A000000"
+        >
+      <ImageView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:background="@drawable/btn_bg_shenhe"
+          android:clickable="true"
+          android:focusable="true"
+          android:text="Hello World!"
+          />
+    </com.yan.rippledrawable.RippleLayout>
 
     <ImageView
         android:id="@+id/iv_code"

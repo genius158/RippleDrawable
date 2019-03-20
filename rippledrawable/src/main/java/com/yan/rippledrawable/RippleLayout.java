@@ -115,6 +115,10 @@ public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListen
     return getRippleDrawable(drawable, 0, drawable, DEFAULT_COLOR);
   }
 
+  public static Drawable getRippleDrawable(Drawable drawable, Drawable mask, int color) {
+    return getRippleDrawable(drawable, 0, mask, color);
+  }
+
   public static Drawable getRippleDrawable(Drawable drawable, int rippleStyle, Drawable mask,
       int color) {
 
