@@ -26,7 +26,6 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
   private boolean coverShow;
   private final Rect bounds = new Rect();
   private final Paint paint = new Paint();
-  private Shader shader;
 
   DrawableWithCover(Drawable original, Drawable mask, int color) {
     this.original = original;
@@ -45,7 +44,7 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
     if (!coverShow) {
       return;
     }
-    if (shader == null) {
+    if (paint.getShader() == null) {
       return;
     }
     canvas.drawRect(bounds, paint);
@@ -113,18 +112,25 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
   }
 
   private void loadShader(Drawable drawable) {
-    if (shader != null) {
+    if (paint.getShader() != null) {
       return;
     }
     Bitmap coverBitmap =
         Bitmap.createBitmap(bounds.width(), bounds.height(), Bitmap.Config.ALPHA_8);
-    shader = new BitmapShader(coverBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
+    Shader shader = new BitmapShader(coverBitmap, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP);
     Canvas canvas = new Canvas(coverBitmap);
     if (drawable == null) {
       drawable = new ShapeDrawable();
     }
     drawable.draw(canvas);
     paint.setShader(shader);
+  }
+
+  @Override public boolean setVisible(boolean visible, boolean restart) {
+    if (!isVisible()) {
+      paint.setShader(null);
+    }
+    return super.setVisible(visible, restart);
   }
 
   @Override public boolean isStateful() {

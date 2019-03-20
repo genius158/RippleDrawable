@@ -17,6 +17,7 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import com.yan.rippledrawable.ripple.RippleDrawableWrap;
 
 /**
  * @author genius158
@@ -128,7 +129,7 @@ public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListen
       if (drawable == null && mask == null) {
         return new RippleDrawable(ColorStateList.valueOf(color), null, null);
       }
-      return new DrawableRippleWithCover(drawable, mask, color);
+      return new RippleDrawableWrap(drawable, mask, color);
     }
 
     if (drawable == null

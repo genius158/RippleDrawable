@@ -32,9 +32,15 @@ import android.support.annotation.RequiresApi;
     if (original != null) {
       original.draw(canvas);
     }
+
     canvas.clipRect(getBounds());
     super.draw(canvas);
   }
+
+  @Override public void setHotspot(float x, float y) {
+    super.setHotspot(x, y);
+  }
+
 
   @Override protected void onBoundsChange(Rect bounds) {
     super.onBoundsChange(bounds);
