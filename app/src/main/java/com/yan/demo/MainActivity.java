@@ -14,6 +14,6 @@ public class MainActivity extends AppCompatActivity {
     setContentView(R.layout.activity_main);
     Drawable testDrawable = ContextCompat.getDrawable(MainActivity.this, R.drawable.test_icon);
     ((ImageView) findViewById(R.id.iv_code)).setImageDrawable(
-        RippleLayout.getRippleDrawable(testDrawable));
+        RippleLayout.getRippleDrawable(testDrawable, 1, testDrawable, RippleLayout.DEFAULT_COLOR));
   }
 }

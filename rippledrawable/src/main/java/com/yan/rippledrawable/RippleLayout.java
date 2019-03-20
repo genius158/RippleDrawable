@@ -22,18 +22,20 @@ import android.view.ViewGroup;
  * @author genius158
  */
 public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListener {
-  private static final int DEFAULT_COLOR = Color.parseColor("#24000000");
+  public static final int DEFAULT_COLOR = Color.parseColor("#24000000");
 
   private View child;
   private Drawable rippleDrawable;
   private int rippleColor;
   private int rippleMaskId;
+  private int rippleStyle;
 
   public RippleLayout(Context context, AttributeSet attrs) {
     super(context, attrs);
     TypedArray ta = context.obtainStyledAttributes(attrs, R.styleable.RippleLayout);
     rippleColor = ta.getColor(R.styleable.RippleLayout_rippleColor, DEFAULT_COLOR);
     rippleMaskId = ta.getResourceId(R.styleable.RippleLayout_rippleMask, -1);
+    rippleStyle = ta.getInt(R.styleable.RippleLayout_rippleStyle, 0);
     ta.recycle();
   }
 
@@ -104,22 +106,23 @@ public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListen
       Drawable drawableBG = child.getBackground();
       Drawable drawableMask =
           rippleMaskId == -1 ? drawableBG : ContextCompat.getDrawable(getContext(), rippleMaskId);
-      rippleDrawable = getRippleDrawable(drawableBG, drawableMask, rippleColor);
+      rippleDrawable = getRippleDrawable(drawableBG, rippleStyle, drawableMask, rippleColor);
       ViewCompat.setBackground(child, rippleDrawable);
     }
   }
 
   public static Drawable getRippleDrawable(Drawable drawable) {
-    return getRippleDrawable(drawable, DEFAULT_COLOR);
+    return getRippleDrawable(drawable, 0, drawable, DEFAULT_COLOR);
   }
 
-  public static Drawable getRippleDrawable(Drawable drawable, int color) {
-    return getRippleDrawable(drawable, drawable, color);
-  }
+  public static Drawable getRippleDrawable(Drawable drawable, int rippleStyle, Drawable mask,
+      int color) {
 
-  public static Drawable getRippleDrawable(Drawable drawable, Drawable mask, int color) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      return new RippleDrawable(ColorStateList.valueOf(color), drawable, mask);
+      if (rippleStyle == 0) {
+        return new RippleDrawable(ColorStateList.valueOf(color), drawable, mask);
+      }
+      return new DrawableRippleWithCover(drawable, color);
     }
 
     if (drawable == null

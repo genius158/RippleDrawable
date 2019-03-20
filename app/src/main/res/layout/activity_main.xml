@@ -56,9 +56,9 @@
         app:rippleColor="#3A000000"
         >
       <ImageView
-          android:layout_width="200dp"
+          android:layout_width="100dp"
           android:layout_height="100dp"
-          android:background="#666666"
+          android:background="@drawable/test_icon"
           android:clickable="true"
           android:focusable="true"
           android:text="Hello World!"
