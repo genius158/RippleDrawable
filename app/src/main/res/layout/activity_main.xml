@@ -179,6 +179,43 @@
           android:textSize="30dp"
           />
     </com.yan.rippledrawable.RippleLayout>
+    <com.yan.rippledrawable.RippleLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:rippleColor="#3A000000"
+        app:rippleMask="@drawable/round_shape_test"
+        app:rippleStyle="borderless"
+        >
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:clickable="true"
+          android:focusable="true"
+          android:padding="8dp"
+          android:text="H"
+          android:textSize="30dp"
+          />
+    </com.yan.rippledrawable.RippleLayout>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardCornerRadius="20dp"
+        >
+      <TextView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="?attr/selectableItemBackgroundBorderless"
+          android:clickable="true"
+          android:focusable="true"
+          android:padding="8dp"
+          android:text="H"
+          android:textSize="30dp"
+          />
+    </android.support.v7.widget.CardView>
 
   </LinearLayout>
+
+
 </ScrollView>

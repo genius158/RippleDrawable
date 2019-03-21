@@ -230,6 +230,7 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
     Canvas canvas = new Canvas(coverBitmap);
     if (drawable == null) {
       drawable = new ShapeDrawable();
+      drawable.setBounds(bounds);
     }
     drawable.draw(canvas);
     paint.setShader(shader);
