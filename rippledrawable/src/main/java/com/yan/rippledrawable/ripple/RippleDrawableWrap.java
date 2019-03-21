@@ -105,6 +105,9 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
   }
 
   @Override protected boolean onStateChange(int[] stateSet) {
+    if (original != null) {
+      original.setState(stateSet);
+    }
     boolean enabled = false;
     boolean pressed = false;
     boolean focused = false;
