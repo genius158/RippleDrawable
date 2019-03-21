@@ -100,6 +100,7 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
     if (!visible) {
       rippleAnim.cancel();
       rippleAnim.rippleAnim = null;
+      paint.setShader(null);
     }
     return super.setVisible(visible, restart);
   }
