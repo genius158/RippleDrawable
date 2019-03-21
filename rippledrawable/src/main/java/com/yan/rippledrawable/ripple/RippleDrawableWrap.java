@@ -98,7 +98,7 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
 
   @Override public boolean setVisible(boolean visible, boolean restart) {
     if (!visible) {
-      rippleAnim.cancel();
+      rippleAnim.end();
       rippleAnim.rippleAnim = null;
       paint.setShader(null);
     }
@@ -216,6 +216,12 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
     void cancel() {
       if (rippleAnim != null && rippleAnim.isRunning()) {
         rippleAnim.cancel();
+      }
+    }
+
+    void end() {
+      if (rippleAnim != null && rippleAnim.isRunning()) {
+        rippleAnim.end();
       }
     }
   }
