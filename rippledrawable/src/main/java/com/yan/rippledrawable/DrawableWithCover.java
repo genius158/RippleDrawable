@@ -105,9 +105,6 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
     if (original != null) {
       original.setBounds(this.bounds);
     }
-    if (mask != null) {
-      mask.setBounds(this.bounds);
-    }
     invalidateSelf();
   }
 
@@ -127,6 +124,9 @@ class DrawableWithCover extends Drawable implements Drawable.Callback {
   }
 
   @Override public boolean setVisible(boolean visible, boolean restart) {
+    if (original != null) {
+      original.setVisible(visible, restart);
+    }
     if (!isVisible()) {
       paint.setShader(null);
     }

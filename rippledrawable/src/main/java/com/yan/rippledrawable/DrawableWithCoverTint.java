@@ -118,13 +118,13 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
           mask.setLayoutDirection(original.getLayoutDirection());
         }
-        mask.setLevel(original.getLevel());
       }
     }
 
     if (mask == null) {
       mask = new ColorDrawable(color);
     }
+    mask.setBounds(bounds);
     mask.setCallback(this);
   }
 
@@ -135,9 +135,6 @@ class DrawableWithCoverTint extends Drawable implements Drawable.Callback {
     this.bounds.set(bounds);
     if (original != null) {
       original.setBounds(this.bounds);
-    }
-    if (mask != null) {
-      mask.setBounds(bounds);
     }
     invalidateSelf();
   }

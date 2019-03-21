@@ -18,26 +18,18 @@ import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
 
 public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
-  private static final String TAG = "RippleDrawableWrap";
-  private static final long ENTER_DURATION = 1500;
-  private static final long DURING_EXIT = 200;
+  private final int DURING_ALPHA = 350;
 
-  private Drawable original;
-  private Drawable mask;
+  private final Drawable original;
+  private final Drawable mask;
 
   private Paint paint;
   private int paintAlpha;
-  private PointF point = new PointF();
-  private Rect bounds = new Rect();
-
-  @Override public void setHotspot(float x, float y) {
-    super.setHotspot(x, y);
-    point.set(x, y);
-  }
+  private final PointF touchPoint = new PointF();
+  private final Rect bounds = new Rect();
 
   private final RippleAnim rippleAnim;
 
@@ -49,7 +41,7 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
     paint.setColor(color);
     paint.setStyle(Paint.Style.FILL);
     paint.setColorFilter(new PorterDuffColorFilter(
-        Color.rgb(Color.red(color), Color.green(color), Color.blue(color)),
+        Color.argb(185, Color.red(color), Color.green(color), Color.blue(color)),
         PorterDuff.Mode.DST_IN));
     paintAlpha = paint.getAlpha();
 
@@ -59,8 +51,21 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
     }
   }
 
-  private float getMaxRadius() {
-    return (float) Math.sqrt(Math.pow(bounds.width(), 2) + Math.pow(bounds.height(), 2));
+  @Override public void draw(@NonNull Canvas canvas) {
+    if (original != null) {
+      original.draw(canvas);
+    }
+    canvas.drawCircle(touchPoint.x, touchPoint.y, rippleAnim.getRadius(), paint);
+  }
+
+  private float getMaxRadius(boolean withPoint) {
+    float h = bounds.width();
+    float v = bounds.height();
+    if (withPoint) {
+      h = Math.max(touchPoint.x, bounds.width() - touchPoint.x);
+      v = Math.max(touchPoint.y, bounds.height() - touchPoint.y);
+    }
+    return (float) Math.sqrt(Math.pow(h, 2) + Math.pow(v, 2));
   }
 
   @Override protected void onBoundsChange(Rect bounds) {
@@ -75,22 +80,10 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
       mask.setBounds(this.bounds);
     }
     invalidateSelf();
-    Log.e(TAG, "onBoundsChange: " + bounds);
   }
 
   @Override public boolean isStateful() {
     return true;
-  }
-
-  @Override public void draw(@NonNull Canvas canvas) {
-    drawRipple(canvas);
-  }
-
-  private void drawRipple(Canvas canvas) {
-    if (original != null) {
-      original.draw(canvas);
-    }
-    canvas.drawCircle(point.x, point.y, rippleAnim.getRadius(), paint);
   }
 
   @Override public void setAlpha(int alpha) {
@@ -105,7 +98,8 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
 
   @Override public boolean setVisible(boolean visible, boolean restart) {
     if (!visible) {
-      rippleAnim.applyReleaseAnim();
+      rippleAnim.cancel();
+      rippleAnim.rippleAnim = null;
     }
     return super.setVisible(visible, restart);
   }
@@ -129,17 +123,15 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
     }
 
     if (enabled && pressed) {
-      rippleAnim.applyPressAnim();
+      rippleAnim.tapDown();
     }
 
     boolean coverShow = enabled && (pressed || focused || hovered);
     if (coverShow) {
       loadShader(mask == null ? original : mask);
     } else {
-      rippleAnim.applyReleaseAnim();
+      rippleAnim.tapUp();
     }
-
-    Log.e(TAG, "onStateChange: " + enabled + "  " + focused + "  " + pressed + "   " + hovered);
 
     invalidateSelf();
     return true;
@@ -149,69 +141,78 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
     private ValueAnimator rippleAnim;
     private float radius = 0;
 
-    void setValue(float radius, int alpha) {
-      Log.e(TAG, "setValue: " + radius + "   " + alpha + " " + paint.getAlpha());
-      this.radius = radius;
-      paint.setAlpha(alpha);
-      invalidateSelf();
-    }
-
     float getRadius() {
       return radius;
     }
 
-    void applyPressAnim() {
+    private ValueAnimator getAnim(int during, ValueAnimator.AnimatorUpdateListener updateListener) {
+      ValueAnimator rippleAnim = ValueAnimator.ofInt(0, during);
+      rippleAnim.setDuration(during);
+      rippleAnim.addUpdateListener(updateListener);
+      return rippleAnim;
+    }
+
+    void tapDown() {
+      final float maxRadius = getMaxRadius(false);
+      final float touchRadius = getMaxRadius(true);
+      final float startRadius = Math.min(touchRadius / 4, 50);
+      final int startAlpha = paintAlpha;
       cancel();
-      reset();
-      final float maxRadius = getMaxRadius();
-      final float startRadius = radius;
-      rippleAnim = ValueAnimator.ofFloat(0F, 1F);
-      rippleAnim.setDuration(ENTER_DURATION);
-      rippleAnim.setInterpolator(new AccelerateDecelerateInterpolator());
-      rippleAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+      final int enterDuring = (int) (maxRadius * (maxRadius / touchRadius));
+
+      rippleAnim = getAnim(enterDuring, new ValueAnimator.AnimatorUpdateListener() {
         @Override public void onAnimationUpdate(ValueAnimator animation) {
-          float value = (float) animation.getAnimatedValue();
-          float tempRadius = value * (maxRadius - startRadius) + startRadius;
-          setValue(tempRadius, paintAlpha);
+          int value = (int) animation.getAnimatedValue();
+          if (value <= DURING_ALPHA) {
+            float offset = value / (float) DURING_ALPHA;
+            paint.setAlpha((int) (offset * startAlpha));
+          } else if (paint.getAlpha() != startAlpha) {
+            paint.setAlpha(startAlpha);
+          }
+
+          float offset = value / (float) enterDuring;
+          radius = offset * (maxRadius - startRadius) + startRadius;
+
+          invalidateSelf();
         }
       });
       rippleAnim.start();
     }
 
-    private void applyReleaseAnim() {
+    private void tapUp() {
+      if (rippleAnim == null) {
+        return;
+      }
       cancel();
-      final float maxRadius = getMaxRadius();
-      final float startRadius = radius;
+
+      final float maxRadius = getMaxRadius(true);
+      final float startRadius = Math.max(maxRadius / 3, radius);
       final float startAlpha = paintAlpha;
 
-      if (startRadius <= maxRadius) {
-        rippleAnim = ValueAnimator.ofFloat(0F, 1F);
-        rippleAnim.setDuration(DURING_EXIT);
-        rippleAnim.setInterpolator(new AccelerateDecelerateInterpolator());
-        rippleAnim.addListener(new AnimatorListenerAdapter() {
-          @Override public void onAnimationEnd(Animator animation) {
-            invalidateSelf();
-          }
-        });
-        rippleAnim.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-          @Override public void onAnimationUpdate(ValueAnimator animation) {
-            float value = (float) animation.getAnimatedValue();
-            float tempRadius = value * (maxRadius - startRadius) + startRadius;
-            setValue(tempRadius, (int) ((1 - value) * startAlpha));
-          }
-        });
-        rippleAnim.start();
-      }
+      rippleAnim = getAnim(DURING_ALPHA, new ValueAnimator.AnimatorUpdateListener() {
+        @Override public void onAnimationUpdate(ValueAnimator animation) {
+          int value = (int) animation.getAnimatedValue();
+          float offset = value / (float) DURING_ALPHA;
+          radius = offset * (maxRadius - startRadius) + startRadius;
+          radius = Math.min(radius, maxRadius);
+          paint.setAlpha((int) ((1 - offset) * startAlpha));
+          invalidateSelf();
+        }
+      });
+      rippleAnim.setInterpolator(new DecelerateInterpolator());
+      rippleAnim.addListener(new AnimatorListenerAdapter() {
+        @Override public void onAnimationEnd(Animator animation) {
+          rippleAnim = null;
+        }
+      });
+      rippleAnim.start();
     }
 
     void cancel() {
       if (rippleAnim != null && rippleAnim.isRunning()) {
         rippleAnim.cancel();
       }
-    }
-
-    private void reset() {
-      this.radius = 0;
     }
   }
 
@@ -228,6 +229,11 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
     }
     drawable.draw(canvas);
     paint.setShader(shader);
+  }
+
+  @Override public void setHotspot(float x, float y) {
+    super.setHotspot(x, y);
+    touchPoint.set(x, y);
   }
 
   @Override public int getIntrinsicWidth() {

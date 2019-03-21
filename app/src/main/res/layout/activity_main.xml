@@ -86,21 +86,36 @@
         >
       <ImageView
           android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
+          android:layout_height="120dp"
           android:background="@drawable/btn_bg_shenhe"
           android:clickable="true"
           android:focusable="true"
           android:text="Hello World!"
           />
     </com.yan.rippledrawable.RippleLayout>
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:background="@drawable/btn_bg_shenhe"
+        >
+      <ImageView
+          android:layout_width="match_parent"
+          android:layout_height="match_parent"
+          android:background="?attr/selectableItemBackgroundBorderless"
+          android:clickable="true"
+          android:focusable="true"
+          android:text="Hello World!"
+          />
+    </FrameLayout>
     <com.yan.rippledrawable.RippleLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:rippleColor="#3A000000"
+        app:rippleMask="@drawable/round_shape_test"
         app:rippleStyle="borderless"
         >
       <TextView
-          android:layout_width="wrap_content"
+          android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:clickable="true"
           android:focusable="true"
@@ -119,6 +134,51 @@
         android:src="@drawable/test_icon"
         android:text="Hello World!"
         />
+    <com.yan.rippledrawable.RippleLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:rippleColor="#3A000000"
+        app:rippleStyle="borderless"
+        >
+      <ImageView
+          android:layout_width="80dp"
+          android:layout_height="120dp"
+          android:background="@drawable/btn_bg_shenhe"
+          android:clickable="true"
+          android:focusable="true"
+          android:text="Hello World!"
+          />
+    </com.yan.rippledrawable.RippleLayout>
+    <FrameLayout
+        android:layout_width="80dp"
+        android:layout_height="120dp"
+        android:background="@drawable/btn_bg_shenhe"
+        >
+      <ImageView
+          android:layout_width="80dp"
+          android:layout_height="match_parent"
+          android:background="?attr/selectableItemBackgroundBorderless"
+          android:clickable="true"
+          android:focusable="true"
+          android:text="Hello World!"
+          />
+    </FrameLayout>
+    <com.yan.rippledrawable.RippleLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:rippleColor="#3A000000"
+        app:rippleStyle="borderless"
+        >
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:clickable="true"
+          android:focusable="true"
+          android:padding="8dp"
+          android:text="Hello World!"
+          android:textSize="30dp"
+          />
+    </com.yan.rippledrawable.RippleLayout>
 
   </LinearLayout>
 </ScrollView>

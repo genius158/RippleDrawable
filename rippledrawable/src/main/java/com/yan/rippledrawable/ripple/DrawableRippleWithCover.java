@@ -1,4 +1,4 @@
-package com.yan.rippledrawable;
+package com.yan.rippledrawable.ripple;
 
 import android.content.res.ColorStateList;
 import android.graphics.Bitmap;
