@@ -15,27 +15,32 @@ public class MainActivity extends AppCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main2);
-    //Drawable testDrawable = ContextCompat.getDrawable(MainActivity.this, R.drawable.test_icon);
-    //((ImageView) findViewById(R.id.iv_code)).setImageDrawable(
-    //    RippleLayout.getRippleDrawable(testDrawable, testDrawable, RippleLayout.DEFAULT_COLOR));
+    setContentView(R.layout.activity_main3);
+    ImageView ivTest = findViewById(R.id.iv_code);
+    if (ivTest != null) {
+      Drawable testDrawable = ContextCompat.getDrawable(MainActivity.this, R.drawable.test_icon);
+      ((ImageView) findViewById(R.id.iv_code)).setImageDrawable(
+          RippleLayout.getRippleDrawable(testDrawable, testDrawable, RippleLayout.DEFAULT_COLOR));
+    }
     RecyclerView rv = findViewById(R.id.rv);
-    rv.setLayoutManager(new LinearLayoutManager(this));
-    rv.setAdapter(new RecyclerView.Adapter() {
-      @NonNull @Override
-      public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        return new RecyclerView.ViewHolder(
-            getLayoutInflater().inflate(R.layout.activity_item, viewGroup, false)) {
-        };
-      }
+    if (rv != null) {
+      rv.setLayoutManager(new LinearLayoutManager(this));
+      rv.setAdapter(new RecyclerView.Adapter() {
+        @NonNull @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+          return new RecyclerView.ViewHolder(
+              getLayoutInflater().inflate(R.layout.activity_item, viewGroup, false)) {
+          };
+        }
 
-      @Override public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
+        @Override public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int i) {
 
-      }
+        }
 
-      @Override public int getItemCount() {
-        return 40;
-      }
-    });
+        @Override public int getItemCount() {
+          return 40;
+        }
+      });
+    }
   }
 }
