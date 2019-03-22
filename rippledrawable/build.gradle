@@ -1,5 +1,14 @@
 apply plugin: 'com.android.library'
+apply plugin: 'com.novoda.bintray-release'
 
+publish {
+  userOrg = 'yan157'
+  groupId = 'com.yan'
+  artifactId = 'rippledrawable'
+  publishVersion = '1.0.0'
+  desc = ""
+  website = 'https://github.com/genius158/RippleDrawable'
+}
 android {
   compileSdkVersion 28
 

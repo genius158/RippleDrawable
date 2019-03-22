@@ -181,6 +181,7 @@ class RippleDrawableWrap extends Drawable implements Drawable.Callback {
           invalidateSelf();
         }
       });
+      rippleAnim.setInterpolator(new DecelerateInterpolator(0.8F));
       rippleAnim.start();
     }
 
