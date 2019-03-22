@@ -17,7 +17,6 @@ import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
-import com.yan.rippledrawable.ripple.RippleDrawableWrap;
 
 /**
  * @author genius158

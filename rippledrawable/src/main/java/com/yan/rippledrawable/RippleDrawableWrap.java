@@ -1,4 +1,4 @@
-package com.yan.rippledrawable.ripple;
+package com.yan.rippledrawable;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -20,7 +20,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.support.annotation.NonNull;
 import android.view.animation.DecelerateInterpolator;
 
-public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
+class RippleDrawableWrap extends Drawable implements Drawable.Callback {
   private final int DURING_ALPHA = 350;
 
   private final Drawable original;
@@ -33,7 +33,7 @@ public class RippleDrawableWrap extends Drawable implements Drawable.Callback {
 
   private final RippleAnim rippleAnim;
 
-  public RippleDrawableWrap(Drawable original, Drawable mask, int color) {
+   RippleDrawableWrap(Drawable original, Drawable mask, int color) {
     this.original = original;
     this.mask = mask;
     paint = new Paint();
