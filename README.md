@@ -1,7 +1,7 @@
 # RippleDrawable (ripple with mask|带遮罩的水波纹)
 
 ## gradle
-implementation 'com.yan:rippledrawable:1.0.0'
+implementation 'com.yan:rippledrawable:1.0.1'
 
 ### screenshot
 the bottom bg with shadow

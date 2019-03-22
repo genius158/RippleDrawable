@@ -33,7 +33,7 @@ class RippleDrawableWrap extends Drawable implements Drawable.Callback {
 
   private final RippleAnim rippleAnim;
 
-   RippleDrawableWrap(Drawable original, Drawable mask, int color) {
+  RippleDrawableWrap(Drawable original, Drawable mask, int color) {
     this.original = original;
     this.mask = mask;
     paint = new Paint();
@@ -55,7 +55,9 @@ class RippleDrawableWrap extends Drawable implements Drawable.Callback {
     if (original != null) {
       original.draw(canvas);
     }
-    canvas.drawCircle(touchPoint.x, touchPoint.y, rippleAnim.getRadius(), paint);
+    if (rippleAnim.rippleAnim != null) {
+      canvas.drawCircle(touchPoint.x, touchPoint.y, rippleAnim.getRadius(), paint);
+    }
   }
 
   private float getMaxRadius(boolean withPoint) {
@@ -137,7 +139,9 @@ class RippleDrawableWrap extends Drawable implements Drawable.Callback {
       rippleAnim.tapUp();
     }
 
-    invalidateSelf();
+    if (rippleAnim.rippleAnim != null) {
+      invalidateSelf();
+    }
     return true;
   }
 
