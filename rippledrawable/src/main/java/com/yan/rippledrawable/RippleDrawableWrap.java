@@ -20,7 +20,7 @@ import android.view.animation.DecelerateInterpolator;
 
 class RippleDrawableWrap extends AbstractDrawableWithCover {
   private final int DURING_ALPHA = 350;
-  private Paint paint;
+  private final Paint paint;
   private int paintAlpha;
   private final PointF touchPoint = new PointF();
   private final RippleAnim rippleAnim;
@@ -42,7 +42,7 @@ class RippleDrawableWrap extends AbstractDrawableWithCover {
   @Override public void draw(@NonNull Canvas canvas) {
     super.draw(canvas);
     if (rippleAnim.rippleAnim != null) {
-      canvas.drawCircle(touchPoint.x, touchPoint.y, rippleAnim.getRadius(), paint);
+      canvas.drawCircle(touchPoint.x, touchPoint.y, rippleAnim.radius, paint);
     }
   }
 
@@ -104,13 +104,14 @@ class RippleDrawableWrap extends AbstractDrawableWithCover {
     paint.setShader(shader);
   }
 
+  @Override public void setHotspot(float x, float y) {
+    super.setHotspot(x, y);
+    touchPoint.set(x, y);
+  }
+
   class RippleAnim {
     private ValueAnimator rippleAnim;
     private float radius = 0;
-
-    float getRadius() {
-      return radius;
-    }
 
     private ValueAnimator getAnim(int during, ValueAnimator.AnimatorUpdateListener updateListener) {
       ValueAnimator rippleAnim = ValueAnimator.ofInt(0, during);
@@ -148,7 +149,7 @@ class RippleDrawableWrap extends AbstractDrawableWithCover {
       rippleAnim.start();
     }
 
-    private void tapUp() {
+    void tapUp() {
       if (rippleAnim == null) {
         return;
       }
@@ -188,10 +189,5 @@ class RippleDrawableWrap extends AbstractDrawableWithCover {
         rippleAnim.end();
       }
     }
-  }
-
-  @Override public void setHotspot(float x, float y) {
-    super.setHotspot(x, y);
-    touchPoint.set(x, y);
   }
 }
