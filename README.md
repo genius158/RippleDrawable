@@ -7,6 +7,7 @@ Google商店，应用想要被推荐，必须符合其开发规范，其中按�
 <br/>
 低版本由于性能问题，我并不准备让低版本也产生水波纹的效果，如果那是你的期望，RippleDrawableWrap 可以在低版本使用，但是
 波纹产生的位置，可能需要你自行传入
+
 ## gradle
 implementation 'com.yan:rippledrawable:1.0.1'
 
