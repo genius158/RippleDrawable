@@ -5,23 +5,23 @@ publish {
   userOrg = 'yan157'
   groupId = 'com.yan'
   artifactId = 'rippledrawable'
-  publishVersion = '1.0.5'
+  publishVersion = "1.1.0"
   desc = ""
   website = 'https://github.com/genius158/RippleDrawable'
 }
 android {
   compileSdkVersion 28
 
-
-
   defaultConfig {
     minSdkVersion 15
     targetSdkVersion 28
-    versionCode 4
-    versionName "1.0.5"
+    versionCode Integer.parseInt(publish.publishVersion.replace(".", ""))
+    versionName publish.publishVersion
 
     testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
   }
+
+  println(defaultConfig.versionCode)
 
   buildTypes {
     release {
