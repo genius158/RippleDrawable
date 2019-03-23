@@ -15,7 +15,7 @@ public class MainActivity extends AppCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main3);
+    setContentView(R.layout.activity_main2);
     ImageView ivTest = findViewById(R.id.iv_code);
     if (ivTest != null) {
       Drawable testDrawable = ContextCompat.getDrawable(MainActivity.this, R.drawable.test_icon);
