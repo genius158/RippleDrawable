@@ -11,7 +11,6 @@ import android.graphics.Paint;
 import android.graphics.PointF;
 import android.graphics.PorterDuff;
 import android.graphics.PorterDuffColorFilter;
-import android.graphics.Rect;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
@@ -33,7 +32,7 @@ class RippleDrawableWrap extends AbstractDrawableWithCover {
     paint.setStyle(Paint.Style.FILL);
     paint.setColorFilter(new PorterDuffColorFilter(
         Color.argb(185, Color.red(color), Color.green(color), Color.blue(color)),
-        PorterDuff.Mode.DST_IN));
+        PorterDuff.Mode.SRC_IN));
     paintAlpha = paint.getAlpha();
 
     rippleAnim = new RippleAnim();
@@ -54,13 +53,6 @@ class RippleDrawableWrap extends AbstractDrawableWithCover {
       v = Math.max(touchPoint.y, bounds.height() - touchPoint.y);
     }
     return (float) Math.sqrt(Math.pow(h, 2) + Math.pow(v, 2));
-  }
-
-  @Override protected void onBoundsChange(Rect bounds) {
-    if (mask != null) {
-      mask.setBounds(this.bounds);
-    }
-    super.onBoundsChange(bounds);
   }
 
   @Override public boolean setVisible(boolean visible, boolean restart) {
@@ -106,6 +98,10 @@ class RippleDrawableWrap extends AbstractDrawableWithCover {
 
   @Override public void setHotspot(float x, float y) {
     super.setHotspot(x, y);
+    x = Math.max(x, 0);
+    x = Math.min(x, bounds.width());
+    y = Math.max(y, 0);
+    y = Math.min(y, bounds.height());
     touchPoint.set(x, y);
   }
 

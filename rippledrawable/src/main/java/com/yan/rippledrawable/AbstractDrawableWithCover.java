@@ -82,6 +82,9 @@ abstract class AbstractDrawableWithCover extends Drawable implements Drawable.Ca
     if (original != null) {
       original.setBounds(this.bounds);
     }
+    if (mask != null) {
+      mask.setBounds(this.bounds);
+    }
     invalidateSelf();
   }
 

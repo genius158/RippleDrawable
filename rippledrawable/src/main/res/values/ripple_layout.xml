@@ -4,7 +4,7 @@
     <attr format="color" name="rippleColor"/>
     <attr format="reference" name="rippleMask"/>
     <attr format="enum" name="rippleStyle">
-      <enum name="normal" value="0"/>
+      <enum name="bounded" value="0"/>
       <enum name="borderless" value="1"/>
     </attr>
   </declare-styleable>

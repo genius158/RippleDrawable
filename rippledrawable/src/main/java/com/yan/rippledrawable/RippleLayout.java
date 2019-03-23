@@ -6,17 +6,19 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 import android.graphics.drawable.NinePatchDrawable;
 import android.graphics.drawable.RippleDrawable;
 import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
+import android.support.annotation.IntDef;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewCompat;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
 
 /**
  * @author genius158
@@ -29,6 +31,13 @@ public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListen
   private int rippleColor;
   private int rippleMaskId;
   private int rippleStyle;
+
+  public static final int BOUNDED = 0;
+  public static final int BORDERLESS = 1;
+
+  @IntDef({ BOUNDED, BORDERLESS }) @Retention(RetentionPolicy.SOURCE)
+  public @interface RippleStyle {
+  }
 
   public RippleLayout(Context context, AttributeSet attrs) {
     super(context, attrs);
@@ -112,18 +121,18 @@ public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListen
   }
 
   public static Drawable getRippleDrawable(Drawable drawable) {
-    return getRippleDrawable(drawable, 0, drawable, DEFAULT_COLOR);
+    return getRippleDrawable(drawable, BOUNDED, drawable, DEFAULT_COLOR);
   }
 
   public static Drawable getRippleDrawable(Drawable drawable, Drawable mask, int color) {
-    return getRippleDrawable(drawable, 0, mask, color);
+    return getRippleDrawable(drawable, BOUNDED, mask, color);
   }
 
-  public static Drawable getRippleDrawable(Drawable drawable, int rippleStyle, Drawable mask,
-      int color) {
+  public static Drawable getRippleDrawable(Drawable drawable, @RippleStyle int rippleStyle,
+      Drawable mask, int color) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-      if (Build.VERSION.SDK_INT >= 28 //Build.VERSION_CODES.P
-          || rippleStyle == 0) {
+      // Build.VERSION_CODES.P = 28
+      if (Build.VERSION.SDK_INT >= 28 || rippleStyle == BOUNDED) {
         return new RippleDrawable(ColorStateList.valueOf(color), drawable, mask);
       }
       if (drawable == null && mask == null) {
@@ -131,16 +140,17 @@ public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListen
       }
       return new RippleDrawableWrap(drawable, mask, color);
     }
-
-    if (drawable == null
-        || drawable instanceof StateListDrawable
-        || drawable instanceof ShapeDrawable
-        || drawable instanceof GradientDrawable
-        || drawable instanceof NinePatchDrawable
-        || drawable instanceof BitmapDrawable) {
+    if (isDrawableTint(drawable) && isDrawableTint(mask)) {
       return new DrawableWithCoverTint(drawable, mask, color);
     }
-
     return new DrawableWithCover(drawable, mask, color);
+  }
+
+  private static boolean isDrawableTint(Drawable drawable) {
+    return drawable == null
+        || drawable instanceof StateListDrawable
+        || drawable instanceof ShapeDrawable
+        || drawable instanceof NinePatchDrawable
+        || drawable instanceof BitmapDrawable;
   }
 }
