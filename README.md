@@ -9,7 +9,7 @@ Google商店，应用想要被推荐，必须符合其开发规范，其中按�
 波纹产生的位置，可能需要你自行传入
 
 ## gradle
-implementation 'com.yan:rippledrawable:1.1.0'
+implementation 'com.yan:rippledrawable:1.1.1'
 
 ### screenshot
 the bottom bg with shadow

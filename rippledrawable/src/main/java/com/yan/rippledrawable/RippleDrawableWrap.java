@@ -80,7 +80,7 @@ class RippleDrawableWrap extends AbstractDrawableWithCover {
   }
 
   private void loadShader() {
-    if (paint.getShader() != null) {
+    if (paint.getShader() != null || bounds.width() == 0 || bounds.height() == 0) {
       return;
     }
     Drawable drawable = getMask();

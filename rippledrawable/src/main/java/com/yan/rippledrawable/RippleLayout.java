@@ -107,17 +107,21 @@ public class RippleLayout extends ViewGroup implements View.OnLayoutChangeListen
   @Override
   public void onLayoutChange(View v, int left, int top, int right, int bottom, int oldLeft,
       int oldTop, int oldRight, int oldBottom) {
+    // make sure child that layout finish
+    child.post(new Runnable() {
+      @Override public void run() {
+        boolean bgChanged = rippleDrawable != child.getBackground()
+            || child.getBackground() == null && rippleDrawable == null;
 
-    boolean bgChanged = rippleDrawable != child.getBackground()
-        || child.getBackground() == null && rippleDrawable == null;
-
-    if (bgChanged) {
-      Drawable drawableBG = child.getBackground();
-      Drawable drawableMask =
-          rippleMaskId == -1 ? drawableBG : ContextCompat.getDrawable(getContext(), rippleMaskId);
-      rippleDrawable = getRippleDrawable(drawableBG, rippleStyle, drawableMask, rippleColor);
-      ViewCompat.setBackground(child, rippleDrawable);
-    }
+        if (bgChanged) {
+          Drawable drawableBG = child.getBackground();
+          Drawable drawableMask = rippleMaskId == -1 ? drawableBG
+              : ContextCompat.getDrawable(getContext(), rippleMaskId);
+          rippleDrawable = getRippleDrawable(drawableBG, rippleStyle, drawableMask, rippleColor);
+          ViewCompat.setBackground(child, rippleDrawable);
+        }
+      }
+    });
   }
 
   public static Drawable getRippleDrawable(Drawable drawable) {
