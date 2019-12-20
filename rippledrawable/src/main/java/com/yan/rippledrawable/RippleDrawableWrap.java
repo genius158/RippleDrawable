@@ -14,7 +14,7 @@ import android.graphics.PorterDuffColorFilter;
 import android.graphics.Shader;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.ShapeDrawable;
-import android.support.annotation.NonNull;
+import androidx.annotation.NonNull;
 import android.view.animation.DecelerateInterpolator;
 
 class RippleDrawableWrap extends AbstractDrawableWithCover {

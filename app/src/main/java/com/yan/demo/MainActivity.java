@@ -1,12 +1,14 @@
 package com.yan.demo;
 
+import android.content.pm.ApplicationInfo;
 import android.graphics.drawable.Drawable;
-import android.support.annotation.NonNull;
-import android.support.v4.content.ContextCompat;
-import android.support.v7.app.AppCompatActivity;
+import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
+import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import com.yan.rippledrawable.RippleLayout;
@@ -15,6 +17,14 @@ public class MainActivity extends AppCompatActivity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Log.e("MainActivity", "onCreate: "+    SecurityCheckUtil.getInstance().isRoot()
+        +"   "+SecurityCheckUtil.getInstance().isSUExist()
+    );
+    Log.e("MainActivity",
+        "onCreate: " + (getApplicationInfo().flags &= ApplicationInfo.FLAG_DEBUGGABLE)
+
+    +"   \n"+ android.os.Debug.isDebuggerConnected());
+
     setContentView(R.layout.activity_main2);
     ImageView ivTest = findViewById(R.id.iv_code);
     if (ivTest != null) {
